@@ -12,9 +12,19 @@ struct CheckoutView: View {
     @State private var addLoyaltyDetails = false // CPoint 카드 유무 여부 (바인딩)
     @State private var loyaltyNumber = "" // 카드 번호 입력 (바인딩)
     @State private var tipAmount = 15 // 선택한 팁 금액 (바인딩)
+    @State private var showingPaymentAlert = false // 결제창 여부 (바인딩)
     
     let paymentTypes = ["Cash", "Credit Card", "CPoint"]
     let tipAmounts = [10, 15, 20, 25, 0]
+    
+    var totalPrice: String { // 총 주문 금액 (팁 포함)
+        let formatter = NumberFormatter() // formatter 객체
+        formatter.numberStyle = .currency // formatter 스타일 : $
+        
+        let total = Double(order.total) // 총 주문 금액 가져오기
+        let tipValue = total / 100 * Double(tipAmount) // 팁 가격 설정
+        return formatter.string(from: NSNumber(value: total + tipValue)) ?? "$0"
+    }
     var body: some View {
         Form {
             Section {
@@ -37,14 +47,17 @@ struct CheckoutView: View {
                 }
                 .pickerStyle(.segmented) // 세그먼트 컨트롤 설정
             }
-            Section(header: Text("TOTAL: $100")) {
+            Section(header: Text("TOTAL: \(totalPrice)").font(.largeTitle)) {
                 Button("Confirm order") {
-                    // place the order
+                    showingPaymentAlert.toggle() // showingPaymentAlert 활성화 
                 }
             }
         }
         .navigationTitle("Payment") // 내비게이션 바 타이틀 설정
         .navigationBarTitleDisplayMode(.inline) // 적절한 크기/위치의 내비게이션 바 타이틀 지정
+        .alert(isPresented: $showingPaymentAlert) { // showingPaymentAlert가 True이면 알림창 실행
+            Alert(title: Text("Order confiremd"), message: Text("Your total was \(totalPrice) - Thank you!"), dismissButton: .default(Text("OK")))
+        }
     }
 }
 

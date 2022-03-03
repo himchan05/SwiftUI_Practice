@@ -20,17 +20,31 @@ struct OrderView: View {
                             Text("$\(item.price)")
                         }
                     }
+                    .onDelete(perform: deleteItems)
                 }
                 Section {
                     NavigationLink(destination: CheckoutView()) { // 주문화면
+                        Spacer()
                         Text("Place Order")
+                            .font(.system(size: 15, weight: .semibold))
+                            .background(Color.blue)
+                            .foregroundStyle(Color.red)
+                        Spacer()
                     }
+                    .disabled(order.items.isEmpty) // 주문 건이 없다면 주문 화면 비활성화
                 }
                 .navigationTitle("Order")
                 .listStyle(.insetGrouped) // 그룹화 스타일 지정
+                .toolbar {
+                    //EditButton() // 편집 버튼 추가
+                }
             }
         }
     }
+    func deleteItems(at offsets: IndexSet) { // 선택된 아이템을 제거할 메소드
+        order.items.remove(atOffsets: offsets)
+    }
+
 }
 
 struct OrderView_Previews: PreviewProvider {
@@ -38,3 +52,4 @@ struct OrderView_Previews: PreviewProvider {
         OrderView().environmentObject(Order())
     }
 }
+
