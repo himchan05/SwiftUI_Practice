@@ -7,8 +7,8 @@
 
 import SwiftUI
 struct OrderView: View {
-    @EnvironmentObject var order: Order
-    
+    @EnvironmentObject var order: Order // 전역
+   
     var body: some View {
         NavigationView {
             List {
@@ -26,22 +26,24 @@ struct OrderView: View {
                     NavigationLink(destination: CheckoutView()) { // 주문화면
                         Spacer()
                         Text("Place Order")
-                            .font(.system(size: 15, weight: .semibold))
-                            .background(Color.blue)
-                            .foregroundStyle(Color.red)
+                            .font(.system(size: 30, weight: .bold))
+                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight:  100)
+                            .foregroundStyle(Color.white)
                         Spacer()
                     }
-                    .disabled(order.items.isEmpty) // 주문 건이 없다면 주문 화면 비활성화
+                    .disabled(order.items.isEmpty) // 주문 건이 없다면 주문 화면 비활성
                 }
-                .navigationTitle("Order")
-                .listStyle(.insetGrouped) // 그룹화 스타일 지정
-                .toolbar {
-                    //EditButton() // 편집 버튼 추가
-                }
+                .background(order.items.isEmpty ? Color.red : Color.black)
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight:  100)
+                .cornerRadius(15)
+                .edgesIgnoringSafeArea(.all)
             }
+            .navigationTitle("Order")
+            .listStyle(.insetGrouped) // 그룹화 스타일 지정
         }
     }
     func deleteItems(at offsets: IndexSet) { // 선택된 아이템을 제거할 메소드
+        order.add(rm_item: order.items[0])
         order.items.remove(atOffsets: offsets)
     }
 

@@ -8,11 +8,11 @@
 import SwiftUI
 struct CheckoutView: View {
     @EnvironmentObject var order: Order
-    @State private var paymentType = "Cash" // 카드 선택 (바인딩)
-    @State private var addLoyaltyDetails = false // CPoint 카드 유무 여부 (바인딩)
-    @State private var loyaltyNumber = "" // 카드 번호 입력 (바인딩)
-    @State private var tipAmount = 15 // 선택한 팁 금액 (바인딩)
-    @State private var showingPaymentAlert = false // 결제창 여부 (바인딩)
+    @State private var paymentType = "Cash"
+    @State private var addLoyaltyDetails = false
+    @State private var loyaltyNumber = ""
+    @State private var tipAmount = 15
+    @State private var showingPaymentAlert = false
     
     let paymentTypes = ["Cash", "Credit Card", "CPoint"]
     let tipAmounts = [10, 15, 20, 25, 0]
@@ -28,15 +28,15 @@ struct CheckoutView: View {
     var body: some View {
         Form {
             Section {
-                Picker("How do you want to pay?", selection: $paymentType) { // 지불 방법 선택 (바인딩)
+                Picker("How do you want to pay?", selection: $paymentType) {
                     ForEach(paymentTypes, id: \.self) {
                         Text($0)
                     }
                 }
-                //.pickerStyle(WheelPickerStyle()) // 피커 스타일 (이 값이 없으면 디폴트 값이 설정됨)
+                //.pickerStyle(WheelPickerStyle())
                 Toggle("Add CPoint loyalty card", isOn: $addLoyaltyDetails.animation()) // 토글 스위치 (애니메이션 효과 적용)
-                if addLoyaltyDetails { // 토글이 On일때만 (포인트 카드가 존재한다면 카드번호 입력 활성화)
-                    TextField("Enter your CPoint ID", text: $loyaltyNumber) // 텍스트 필드
+                if addLoyaltyDetails {
+                    TextField("Enter your CPoint ID", text: $loyaltyNumber)
                 }
             }
             Section(header: Text("Add a tip?")) {
@@ -53,7 +53,7 @@ struct CheckoutView: View {
                 }
             }
         }
-        .navigationTitle("Payment") // 내비게이션 바 타이틀 설정
+        .navigationTitle("Payment")
         .navigationBarTitleDisplayMode(.inline) // 적절한 크기/위치의 내비게이션 바 타이틀 지정
         .alert(isPresented: $showingPaymentAlert) { // showingPaymentAlert가 True이면 알림창 실행
             Alert(title: Text("Order confiremd"), message: Text("Your total was \(totalPrice) - Thank you!"), dismissButton: .default(Text("OK")))

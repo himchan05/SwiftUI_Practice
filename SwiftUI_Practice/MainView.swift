@@ -17,6 +17,10 @@ struct MainView: View {
                 .tabItem { // 탭 바 아이템 2)
                     Label("Order", systemImage: "square.and.pencil")
                 }
+            RemoveItemView() // 삭제 아이템 호출
+                .tabItem { // 탭 바 아이템 3)
+                    Label("Remove Item", systemImage: "trash.fill")
+                }
         }
     }
 }

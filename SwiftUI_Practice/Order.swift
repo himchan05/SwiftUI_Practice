@@ -8,8 +8,9 @@
 
 import SwiftUI
 class Order: ObservableObject { // 옵저버 프로토콜 준수
-    @Published var items = [MenuItem]() // 변경 알림 속성 추가 (@Published)
-
+    @Published var items = [MenuItem]()
+    @Published var rm_items = [MenuItem]()
+    
     var total: Int {
         if items.count > 0 {
             return items.reduce(0) { $0 + $1.price }
@@ -21,7 +22,10 @@ class Order: ObservableObject { // 옵저버 프로토콜 준수
     func add(item: MenuItem) {
         items.append(item)
     }
-
+    func add(rm_item: MenuItem) {
+        rm_items.append(rm_item)
+    }
+    
     func remove(item: MenuItem) {
         if let index = items.firstIndex(of: item) {
             items.remove(at: index)
